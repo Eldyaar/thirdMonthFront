@@ -90,4 +90,50 @@ window.addEventListener('DOMContentLoaded', () => {
     convertor(rubInput, somInput, usdInput, 'rub')
 
     // === / CONVERTOR ===
+
+     // === CARD SWITCHER ===
+        // first part
+    const card = document.querySelector('.card'),
+        btnPrev = document.querySelector('#btn-prev'),
+        btnNext = document.querySelector('#btn-next')
+
+    let count = 0
+    btnNext.addEventListener('click', () => {
+        count++
+        cardSwitcherReq(count)
+    })
+
+    btnPrev.addEventListener('click', () => {
+        count--
+        cardSwitcherReq(count)
+    })
+
+    const cardSwitcherReq = (count) => {
+        fetch(`https://jsonplaceholder.typicode.com/posts/${count}`)
+            .then(response => response.json())
+            .then(data => {
+                if (count > data.length) {
+                    count = 0
+                } else if (count < 0) {
+                    count = data.length
+                }
+                card.innerHTML = `
+                    <h2>${data.title}</h2>
+                    <p style="color: ${data.completed ? 'green' : 'red'}">${data.completed}</p>
+                    <span>${data.id}</span>
+                `
+            })
+            .catch(error => console.log('error: ', error))
+    }
+
+    cardSwitcherReq(count)
+
+        // second part
+
+    fetch('https://jsonplaceholder.typicode.com/posts')
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+
+
+    // === / CARD SWITCHER ===
 })
